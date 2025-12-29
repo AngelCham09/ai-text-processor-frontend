@@ -1,0 +1,39 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.dark {
+  --gradient-primary: linear-gradient(135deg, #4c1d95 0%, #1e1b4b 100%);
+  --gradient-secondary: linear-gradient(135deg, #7c3aed 0%, #3730a3 100%);
+}
+
+/* --- THE FIX IS HERE --- */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+body {
+  /* Default Light Mode Background */
+  @apply bg-gray-50 text-gray-900 transition-colors duration-500 ease-in-out;
+}
+
+.dark body {
+  /* Dark Mode Background */
+  @apply bg-gray-950 text-gray-100;
+}
+
+/* Custom design for cards */
+.glass-card {
+  @apply bg-white/80 dark:bg-gray-800/50 backdrop-blur-md border border-gray-200 dark:border-gray-700 shadow-xl rounded-2xl;
+}
+
+.gradient-bg {
+  background: var(--gradient-primary);
+}

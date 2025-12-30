@@ -1,4 +1,4 @@
-import { fetchApi } from "../utils/fetchApi.ts";
+import { fetchApi } from "~~/server/utils/fetchApi.ts.js";
 
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig();
@@ -6,13 +6,13 @@ export default defineEventHandler(async (event) => {
   const body = await readBody(event);
 
   const token = getCookie(event, "auth_token");
-  
-  const response = await fetchApi(`${config.apiBaseUrl}/process-text`, {
+
+  const response = await fetchApi(`${config.apiBaseUrl}/logout`, {
     method: "POST",
     body: body,
     headers: {
       Accept: "application/json",
-      Authorization: token || "", 
+      Authorization: `Bearer ${token}`,
     },
   });
 

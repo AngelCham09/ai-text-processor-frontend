@@ -85,7 +85,7 @@
             >
               <div class="hidden sm:block text-right">
                 <p class="text-xs font-black text-gray-900 dark:text-white">
-                  {{ user?.name || "User" }}
+                  {{ user?.name }}
                 </p>
                 <p
                   class="text-[10px] font-bold text-blue-500 uppercase tracking-widest"
@@ -125,8 +125,9 @@
 </template>
 
 <script setup>
+import { useMyAuthStore } from '~/stores/auth';
 const colorMode = useColorMode();
-const { isLoggedIn, user, logout } = useAuth();
+const { isLoggedIn, user, logout } = useMyAuthStore();
 
 const toggleTheme = () => {
   const modes = ["light", "dark", "system"];

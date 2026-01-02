@@ -1,0 +1,47 @@
+import { defineStore } from "pinia";
+
+export const useMyAuthStore = defineStore("auth", () => {
+  const token = useCookie("auth_token", { maxAge: 7 * 24 * 3600 }); 
+  const user = useState("auth_user", () => null);
+
+  const isLoggedIn = computed(() => !!token.value);
+
+  // Setters
+  const setToken = (t: string | null) => {
+    token.value = t;
+  };
+
+  const setUser = (u: any) => {
+    user.value = u;
+  };
+
+  // Logout function
+  const logout = async () => {
+    try {
+      await $fetch("/api/auth/logout", { method: "POST" });
+    } catch (err) {
+      console.error("Logout failed", err);
+    } finally {
+      token.value = null;
+      user.value = null;
+      navigateTo("/login");
+    }
+  };
+
+  const loadProfile = async () => {
+    if (token.value) {
+      try {
+        const res = await $fetch("/api/auth/profile", {
+          headers: { Authorization: `Bearer ${token.value}` },
+        });
+        setUser(res.data.user ?? res);
+      } catch (err) {
+        console.error("Failed to load profile", err);
+        setToken(null);
+        setUser(null);
+      }
+    }
+  };
+
+  return { token, user, isLoggedIn, setToken, setUser, logout, loadProfile };
+});

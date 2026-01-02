@@ -9,6 +9,18 @@ export function useAuth() {
   const setUser = (u: any) => (user.value = u);
   const setToken = (t: string | null) => (token.value = t);
 
+  const fetchUser = async () => {
+    if (!token.value || user.value) return;
+
+    try {
+      const res = await $fetch("/api/auth/profile");
+      user.value = res.data.user ?? res;
+    } catch (err) {
+      token.value = null;
+      user.value = null;
+    }
+  };
+
   const logout = async () => {
     try {
       await $fetch("/api/auth/logout", {
@@ -33,6 +45,7 @@ export function useAuth() {
     token,
     setUser,
     setToken,
+    fetchUser,
     logout,
     isLoggedIn,
   };

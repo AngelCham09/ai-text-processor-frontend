@@ -5,7 +5,7 @@ export default defineEventHandler(async (event) => {
 
   const token = getCookie(event, "auth_token");
 
-  const response = await fetchApi(`${config.apiBaseUrl}/logout`, {
+  const response = await fetchApi(`${config.apiBaseUrl}/profile`, {
     headers: {
       Accept: "application/json",
       Authorization: `Bearer ${token}`,

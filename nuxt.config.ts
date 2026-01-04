@@ -8,7 +8,7 @@ export default defineNuxtConfig({
     plugins: [tailwindcss()],
   },
   css: ["./app/assets/css/main.css"],
-  modules: ["@primevue/nuxt-module", "@nuxtjs/color-mode"],
+  modules: ["@primevue/nuxt-module", "@nuxtjs/color-mode", "@pinia/nuxt"],
   colorMode: {
     classSuffix: "", // Tailwind looks for '.dark'
     preference: "system",

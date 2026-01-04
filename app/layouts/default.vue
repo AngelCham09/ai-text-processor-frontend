@@ -1,19 +1,20 @@
 <template>
-  <div
-    class="min-h-screen  transition-colors duration-300"
-  >
+  <div class="min-h-screen transition-colors duration-300">
     <header
       class="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50"
     >
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16">
-          <h1
-            class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600"
-          >
-            Writing Assistant
-          </h1>
-
+          <NuxtLink 
+      to="/" 
+      class="hover:opacity-80 transition-opacity cursor-pointer flex items-center"
+    >
+      <h1 class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">
+        Writing Assistant
+      </h1>
+    </NuxtLink>
           <div class="flex items-center space-x-4">
+            
             <button
               @click="toggleTheme"
               class="group relative flex items-center gap-3 px-4 py-2 rounded-2xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-600 transition-all active:scale-95"
@@ -64,26 +65,71 @@
                   />
                 </svg>
               </div>
-
-              <span
-                class="text-xs font-bold uppercase tracking-widest text-gray-600 dark:text-gray-300"
-              >
-                {{ colorMode.preference }}
-              </span>
             </button>
+
+            <div v-if="!isLoggedIn" class="flex items-center space-x-2">
+              <NuxtLink
+                to="/login"
+                class="px-4 py-2 text-sm font-bold text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl transition-colors"
+              >
+                Log In
+              </NuxtLink>
+              <NuxtLink
+                to="/register"
+                class="px-4 py-2 text-sm font-bold bg-blue-600 text-white rounded-xl shadow-lg shadow-blue-500/25 hover:bg-blue-700 transition-all active:scale-95"
+              >
+                Get Started
+              </NuxtLink>
+            </div>
+
+            <div v-else class="flex items-center pl-4 border-l border-gray-200 dark:border-gray-700">
+              <button 
+                type="button" 
+                @click="toggleProfileMenu" 
+                aria-haspopup="true" 
+                aria-controls="overlay_menu"
+                class="flex items-center gap-3 p-1 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-all"
+              >
+                <div class="hidden sm:block text-right leading-tight">
+                  <p class="text-xs font-black text-gray-900 dark:text-white">{{ user?.name }}</p>
+                  <p class="text-[10px] font-bold text-blue-500 uppercase tracking-widest">Free Account</p>
+                </div>
+                
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-purple-600 flex items-center justify-center text-white font-bold shadow-lg shadow-blue-500/20">
+                  {{ user?.name?.charAt(0).toUpperCase() }}
+                </div>
+              </button>
+
+              <Menu ref="menu" id="overlay_menu" :model="menuItems" :popup="true" class="mt-2 w-56 !rounded-2xl !shadow-2xl !border-gray-100 dark:!border-gray-700">
+                <template #item="{ item, props }">
+                  <NuxtLink v-if="item.route" :to="item.route" class="flex items-center px-4 py-3 gap-3 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                    <span :class="item.icon" class="text-lg"></span>
+                    <span class="font-bold text-sm">{{ item.label }}</span>
+                  </NuxtLink>
+                  <button v-else @click="item.command" class="flex items-center w-full px-4 py-3 gap-3 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
+                    <span :class="item.icon" class="text-lg"></span>
+                    <span class="font-bold text-sm">{{ item.label }}</span>
+                  </button>
+                </template>
+              </Menu>
+            </div>
           </div>
         </div>
       </div>
     </header>
 
+    
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       <slot />
     </main>
+
   </div>
 </template>
 
 <script setup>
+import { useMyAuthStore } from '~/stores/auth';
 const colorMode = useColorMode();
+const { isLoggedIn, user, logout } = useMyAuthStore();
 
 const toggleTheme = () => {
   const modes = ["light", "dark", "system"];
@@ -91,5 +137,35 @@ const toggleTheme = () => {
   const currentIndex = modes.indexOf(colorMode.preference);
 
   colorMode.preference = modes[(currentIndex + 1) % modes.length];
+};
+
+const menu = ref();
+
+// Define the menu items
+const menuItems = ref([
+  {
+    label: 'Account',
+    icon: 'pi pi-user',
+    route: '/profile'
+  },
+  {
+    label: 'History',
+    icon: 'pi pi-history',
+    route: '/history'
+  },
+  {
+    separator: true
+  },
+  {
+    label: 'Logout',
+    icon: 'pi pi-sign-out',
+    command: () => {
+      logout();
+    }
+  }
+]);
+
+const toggleProfileMenu = (event) => {
+  menu.value.toggle(event);
 };
 </script>

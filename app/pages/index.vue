@@ -89,7 +89,7 @@
         <button
           @click="processText"
           :disabled="!text.trim() || loading"
-          class="w-full py-4 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 dark:disabled:bg-gray-700 text-white font-bold rounded-xl shadow-lg shadow-blue-500/20 transition-all duration-200 flex items-center justify-center space-x-2 active:scale-[0.98]"
+          class="btn-primary"
         >
           <svg
             v-if="loading"
@@ -274,7 +274,6 @@ async function processText() {
   result.value = "";
 
   try {
-    // 1. $fetch automatically parses JSON. No need for .json()
     const response = await $fetch("/api/process", {
       method: "POST",
       body: {
@@ -283,10 +282,8 @@ async function processText() {
       },
     });
 
-    // 2. If it reaches here, it means the request was SUCCESSFUL (200 OK)
     result.value = response.data?.result || response.result;
   } catch (err) {
-    // 3. If the server returns 400, 401, 500, etc., it jumps here automatically
     error.value =
       err.data?.data?.message || "Something went wrong. Please try again.";
     console.error("API Error:", err);
@@ -339,7 +336,6 @@ async function copyToClipboard() {
   animation: slide-in 0.3s ease-out;
 }
 
-/* Optional: custom scrollbar for the result area */
 ::-webkit-scrollbar {
   width: 6px;
 }

@@ -12,28 +12,78 @@
   --gradient-secondary: linear-gradient(135deg, #7c3aed 0%, #3730a3 100%);
 }
 
-/* --- THE FIX IS HERE --- */
+
 html, body {
   margin: 0;
   padding: 0;
   height: 100%;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
-  /* Default Light Mode Background */
   @apply bg-gray-50 text-gray-900 transition-colors duration-500 ease-in-out;
 }
 
 .dark body {
-  /* Dark Mode Background */
   @apply bg-gray-950 text-gray-100;
 }
 
-/* Custom design for cards */
 .glass-card {
   @apply bg-white/80 dark:bg-gray-800/50 backdrop-blur-md border border-gray-200 dark:border-gray-700 shadow-xl rounded-2xl;
 }
 
 .gradient-bg {
   background: var(--gradient-primary);
+}
+
+.auth-card {
+  @apply bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700;
+}
+
+.auth-card, .glass-card {
+  @apply bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm;
+}
+
+@layer components {
+  .btn-primary {
+    @apply w-full py-4 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 
+           dark:disabled:bg-gray-700 text-white font-bold rounded-xl 
+           shadow-lg shadow-blue-500/20 hover:shadow-blue-500/40 
+           transition-all duration-300 flex items-center justify-center 
+           space-x-2 active:scale-[0.98] cursor-pointer disabled:cursor-not-allowed;
+  }
+
+  .btn-secondary {
+    @apply px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 
+           hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-200 
+           dark:hover:bg-gray-600 rounded-lg transition-colors 
+           flex items-center justify-center space-x-2 active:scale-[0.95] cursor-pointer;
+  }
+
+  .form-input {
+    @apply w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-xl 
+           focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 bg-gray-50 
+           dark:bg-gray-900 text-gray-900 dark:text-white transition-all duration-200 outline-none;
+  }
+
+  .form-input-error {
+    @apply border-red-500 bg-red-50/50 dark:bg-red-900/10 focus:ring-red-500/10 focus:border-red-500;
+  }
+  
+}
+
+::selection {
+  @apply bg-blue-500/30 text-blue-900 dark:text-blue-100;
+}
+
+/* 3. Animation for History Items */
+.history-enter-active {
+  transition: all 0.3s ease-out;
+}
+.history-enter-from {
+  opacity: 0;
+  transform: translateX(20px);
 }

@@ -76,14 +76,14 @@
 <script setup>
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import { useAuth } from "~/composables/useAuth";
+import { useMyAuthStore } from '~/stores/auth';
 
 definePageMeta({
   layout: "auth",
 });
 
 const router = useRouter();
-const { setUser, setToken } = useAuth();
+const { setUser, setToken } = useMyAuthStore();
 
 const email = ref("");
 const password = ref("");

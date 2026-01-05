@@ -151,6 +151,11 @@
 
 <script setup>
 import { ref } from "vue";
+
+definePageMeta({
+  middleware: 'auth'
+});
+
 const currentPage = ref(1);
 const toast = useToast();
 const expandedItems = ref(new Set());
@@ -162,6 +167,7 @@ const toggleExpand = (id) => {
     expandedItems.value.add(id);
   }
 };
+
 const {
   data: historyResponse,
   pending,
@@ -212,14 +218,14 @@ async function copyText(text) {
 }
 
 const clearHistory = async () => {
-  if (confirm("Delete all history records?")) {
-    try {
-      await $fetch("/api/auth/history/clear", { method: "DELETE" });
-      refresh();
-    } catch (e) {
-      console.error("Failed to clear history");
-    }
-  }
+  // if (confirm("Delete all history records?")) {
+  //   try {
+  //     await $fetch("/api/auth/history/clear", { method: "DELETE" });
+  //     refresh();
+  //   } catch (e) {
+  //     console.error("Failed to clear history");
+  //   }
+  // }
 };
 </script>
 <style scoped>

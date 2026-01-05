@@ -41,5 +41,11 @@
 
 <script setup>
 import { useMyAuthStore } from '~/stores/auth';
+
+definePageMeta({
+  middleware: 'auth'
+});
+
 const { user } = useMyAuthStore();
+
 </script>

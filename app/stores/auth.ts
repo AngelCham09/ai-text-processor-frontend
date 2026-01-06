@@ -5,6 +5,7 @@ export const useMyAuthStore = defineStore("auth", () => {
   const user = useState("auth_user", () => null);
 
   const isLoggedIn = computed(() => !!token.value);
+  const isLoggingOut = ref(false);
 
   // Setters
   const setToken = (t: string | null) => {
@@ -17,13 +18,17 @@ export const useMyAuthStore = defineStore("auth", () => {
 
   // Logout function
   const logout = async () => {
+    if (isLoggingOut.value) return;
+    isLoggingOut.value = true;
+
     try {
       await $fetch("/api/auth/logout", { method: "POST" });
     } catch (err) {
-      console.error("Logout failed", err);
+      console.error("Logout failed", err);git add
     } finally {
       token.value = null;
       user.value = null;
+      isLoggingOut.value = false;
       navigateTo("/login");
     }
   };

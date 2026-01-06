@@ -24,7 +24,7 @@ export const useMyAuthStore = defineStore("auth", () => {
     try {
       await $fetch("/api/auth/logout", { method: "POST" });
     } catch (err) {
-      console.error("Logout failed", err);git add
+      console.error("Logout failed", err);
     } finally {
       token.value = null;
       user.value = null;

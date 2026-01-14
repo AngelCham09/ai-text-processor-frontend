@@ -15,9 +15,37 @@
           </button>
         </div>
 
-        <div class="space-y-1">
-          <h1 class="text-2xl font-black text-gray-900 dark:text-white">{{ user?.name }}</h1>
-          <p class="text-gray-500 dark:text-gray-400">{{ user?.email }}</p>
+        <div class="flex justify-between items-start">
+          <div class="space-y-1">
+            <h1 class="text-2xl font-black text-gray-900 dark:text-white">{{ user?.name }}</h1>
+            <p class="text-gray-500 dark:text-gray-400">{{ user?.email }}</p>
+          </div>
+          
+          <span v-if="user?.is_verified" class="px-3 py-1 bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 text-xs font-bold rounded-full uppercase tracking-tighter">
+            Verified
+          </span>
+        </div>
+
+        <div v-if="!user?.is_verified" class="mt-8 p-6 bg-amber-50 dark:bg-amber-900/20 border border-amber-100 dark:border-amber-800 rounded-2xl">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div class="flex items-center gap-4">
+              <div class="hidden sm:flex w-12 h-12 bg-amber-100 dark:bg-amber-800 rounded-xl items-center justify-center text-amber-600 dark:text-amber-400">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+              </div>
+              <div>
+                <h4 class="font-bold text-gray-900 dark:text-white">Verify your email address</h4>
+                <p class="text-sm text-gray-600 dark:text-gray-400">Almost there! Confirm your email to complete your profile setup.</p>
+              </div>
+            </div>
+            <button 
+              @click="resendEmail"
+              :disabled="resending"
+              class="px-5 py-2.5 bg-amber-500 hover:bg-amber-600 disabled:opacity-50 text-white font-bold text-sm rounded-xl transition-all shadow-sm shadow-amber-200"
+            >
+              {{ resending ? 'Sending...' : 'Resend Link' }}
+            </button>
+          </div>
+          <p v-if="resendMessage" class="mt-3 text-xs font-semibold text-amber-700 dark:text-amber-400 animate-pulse">{{ resendMessage }}</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
@@ -47,5 +75,20 @@ definePageMeta({
 });
 
 const { user } = useMyAuthStore();
+const resending = ref(false);
+const resendMessage = ref('');
 
+async function resendEmail() {
+  resending.value = true;
+  resendMessage.value = '';
+  
+  try {
+    await $fetch('/api/auth/resend', { method: 'POST' });
+    resendMessage.value = 'Success! Please check your inbox for the new link.';
+  } catch (err) {
+    resendMessage.value = err.data?.data?.message || 'Failed to resend. Please try again in 1 minute.';
+  } finally {
+    resending.value = false;
+  }
+}
 </script>

@@ -7,7 +7,7 @@ export default defineNuxtConfig({
   vite: {
     plugins: [tailwindcss()],
   },
-  css: ["./app/assets/css/main.css"],
+  css: ["./app/assets/css/main.css", "primeicons/primeicons.css"],
   modules: ["@primevue/nuxt-module", "@nuxtjs/color-mode", "@pinia/nuxt"],
   colorMode: {
     classSuffix: "", // Tailwind looks for '.dark'

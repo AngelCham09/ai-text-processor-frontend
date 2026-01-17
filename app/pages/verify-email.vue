@@ -84,15 +84,8 @@ definePageMeta({
   layout: "auth",
 });
 
-const params = {
-  id: route.query.id,
-  hash: route.query.hash,
-  signature: route.query.signature,
-  expires: route.query.expires,
-};
-
 const { data, error, status } = await useFetch("/api/auth/verify", {
-  query: params,
+  query: route.query,
 });
 
 watch(data, (newData) => {

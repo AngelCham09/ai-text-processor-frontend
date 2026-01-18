@@ -5,10 +5,11 @@ export default defineEventHandler(async (event) => {
 
   const token = getCookie(event, "auth_token");
 
-  const query = getQuery(event);
+  const body = await readBody(event);
 
   const response = await fetchApi(`${config.apiBaseUrl}/history`, {
-    query: query,
+    method: "DELETE",
+    body: body,
     headers: {
       Accept: "application/json",
       Authorization: `Bearer ${token}`,

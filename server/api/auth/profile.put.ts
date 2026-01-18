@@ -4,11 +4,11 @@ export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig();
 
   const token = getCookie(event, "auth_token");
+  const body = await readBody(event);
 
-  const query = getQuery(event);
-
-  const response = await fetchApi(`${config.apiBaseUrl}/history`, {
-    query: query,
+  const response = await fetchApi(`${config.apiBaseUrl}/profile/update`, {
+    method: 'PUT',
+    body: body,
     headers: {
       Accept: "application/json",
       Authorization: `Bearer ${token}`,

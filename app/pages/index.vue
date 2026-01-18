@@ -44,7 +44,7 @@
           <div class="mt-4 flex justify-end">
             <button
               @click="clearText"
-              class="px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors"
+              class="px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors cursor-pointer"
             >
               Clear Text
             </button>
@@ -65,7 +65,7 @@
               :key="option.value"
               @click="action = option.value"
               :class="[
-                'p-4 rounded-xl border-2 transition-all duration-200 text-left group',
+                'p-4 rounded-xl border-2 transition-all duration-200 text-left group cursor-pointer',
                 action === option.value
                   ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 ring-4 ring-blue-500/10'
                   : 'border-gray-100 dark:border-gray-700 hover:border-blue-200 dark:hover:border-gray-600 bg-white dark:bg-gray-800',
@@ -156,7 +156,7 @@
             <button
               v-if="result"
               @click="copyToClipboard"
-              class="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 flex items-center space-x-1 px-2 py-1 rounded-md hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
+              class="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 flex items-center space-x-1 px-2 py-1 rounded-md hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors cursor-pointer"
             >
               <svg
                 class="w-4 h-4"

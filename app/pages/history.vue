@@ -7,16 +7,36 @@
         >
           Processing History
         </h1>
+
         <p class="text-gray-500 dark:text-gray-400">
           Review and reuse your previous AI transformations.
         </p>
       </div>
-      <button
-        @click="clearHistory"
-        class="text-sm font-semibold text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 px-4 py-2 rounded-xl transition-colors"
-      >
-        Clear All
-      </button>
+
+      <div class="flex items-center gap-4">
+        <div
+          v-if="historyResponse?.data?.length"
+          class="flex items-center gap-2 mr-2"
+        >
+          <input
+            type="checkbox"
+            :checked="isAllSelected"
+            @change="toggleSelectAll"
+            class="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+          />
+
+          <span class="text-xs font-bold text-gray-500 uppercase"
+            >Select All</span
+          >
+        </div>
+
+        <button
+          @click="clearHistory"
+          class="text-sm font-semibold text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 px-4 py-2 rounded-xl transition-colors cursor-pointer"
+        >
+          Clear All
+        </button>
+      </div>
     </div>
 
     <div v-if="pending" class="space-y-4">
@@ -32,10 +52,15 @@
       class="py-20 text-center bg-white dark:bg-gray-800 rounded-3xl border-2 border-dashed border-gray-200 dark:border-gray-700"
     >
       <div class="text-4xl mb-4">📜</div>
+
       <p class="text-gray-400 font-bold">No history found yet.</p>
-      <NuxtLink to="/" class="text-blue-500 text-sm font-bold mt-2 inline-block"
-        >Start processing text now →</NuxtLink
+
+      <NuxtLink
+        to="/"
+        class="text-blue-500 text-sm font-bold mt-2 inline-block"
       >
+        Start processing text now →
+      </NuxtLink>
     </div>
 
     <div v-else class="space-y-4">
@@ -46,15 +71,23 @@
       >
         <div class="flex items-start justify-between mb-4">
           <div class="flex items-center gap-3">
+            <input
+              type="checkbox"
+              :value="item.id"
+              v-model="selectedIds"
+              class="w-5 h-5 rounded-lg border-gray-200 text-blue-600 focus:ring-blue-500 cursor-pointer"
+            />
+
             <span
               class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest"
               :class="getActionClass(item.action_type)"
             >
               {{ item.action_type }}
             </span>
-            <span class="text-xs text-gray-400 font-medium">{{
-              item.created_formatted
-            }}</span>
+
+            <span class="text-xs text-gray-400 font-medium">
+              {{ item.created_formatted }}
+            </span>
           </div>
 
           <button
@@ -82,6 +115,7 @@
             <p class="text-[10px] font-bold text-gray-400 uppercase mb-2">
               Input
             </p>
+
             <p
               class="text-sm text-gray-600 dark:text-gray-400 italic transition-all"
               :class="{ 'line-clamp-3': !expandedItems.has(item.id) }"
@@ -89,13 +123,15 @@
               "{{ item.input_text }}"
             </p>
           </div>
+
           <div
             class="bg-blue-50/30 dark:bg-blue-900/10 p-4 rounded-xl border border-blue-50 dark:border-blue-900/20"
           >
             <p class="text-[10px] font-bold text-blue-400 uppercase mb-2">
               Result
             </p>
-            <p 
+
+            <p
               class="text-sm text-gray-900 dark:text-gray-200 transition-all"
               :class="{ 'line-clamp-3': !expandedItems.has(item.id) }"
             >
@@ -105,17 +141,25 @@
         </div>
 
         <div class="mt-4 flex justify-center">
-          <button 
+          <button
             @click="toggleExpand(item.id)"
-            class="text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1"
+            class="text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1 cursor-pointer"
           >
-            {{ expandedItems.has(item.id) ? 'Show Less' : 'Show More' }}
-            <svg 
-              class="w-3 h-3 transition-transform" 
+            {{ expandedItems.has(item.id) ? "Show Less" : "Show More" }}
+
+            <svg
+              class="w-3 h-3 transition-transform"
               :class="{ 'rotate-180': expandedItems.has(item.id) }"
-              fill="none" stroke="currentColor" viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
             >
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 9l-7 7-7-7"
+              />
             </svg>
           </button>
         </div>
@@ -126,13 +170,17 @@
       >
         <p class="text-sm font-bold text-gray-500 dark:text-gray-400 px-2">
           Showing
+
           <span class="text-blue-600"
             >{{ historyResponse.meta.from }}-{{ historyResponse.meta.to }}</span
           >
+
           of
+
           <span class="text-gray-900 dark:text-white">{{
             historyResponse.meta.total
           }}</span>
+
           results
         </p>
 
@@ -146,19 +194,71 @@
         />
       </div>
     </div>
+
+    <Transition name="slide-up">
+      <div
+        v-if="selectedIds.length > 0"
+        class="fixed bottom-8 left-1/2 -translate-x-1/2 z-50"
+      >
+        <button
+          @click="deleteSelected"
+          class="bg-gray-900 dark:bg-white text-white dark:text-gray-900 px-8 py-4 rounded-2xl shadow-2xl flex items-center gap-4 hover:scale-105 transition-all border border-gray-700 dark:border-gray-200 cursor-pointer"
+        >
+          <span class="text-sm font-black uppercase tracking-tight">
+            Delete {{ selectedIds.length }} Selected
+          </span>
+
+          <div class="h-4 w-[1px] bg-gray-700 dark:bg-gray-300"></div>
+
+          <span
+            class="text-[10px] font-black text-red-500 uppercase tracking-widest"
+            >Confirm</span
+          >
+        </button>
+      </div>
+    </Transition>
   </div>
+
+  <HistoryConfirmDialog
+    :show="dialogConfig.show"
+    :title="dialogConfig.title"
+    :message="dialogConfig.message"
+    :type="dialogConfig.type"
+    :confirmText="dialogConfig.confirmText"
+    @confirm="handleDialogConfirm"
+    @cancel="dialogConfig.show = false"
+  />
 </template>
 
 <script setup>
 import { ref } from "vue";
 
 definePageMeta({
-  middleware: 'auth'
+  middleware: "auth",
 });
 
 const currentPage = ref(1);
 const toast = useToast();
 const expandedItems = ref(new Set());
+const selectedIds = ref([]);
+
+const isAllSelected = computed(() => {
+  if (!historyResponse.value?.data?.length) return false;
+  return historyResponse.value.data.every((item) =>
+    selectedIds.value.includes(item.id),
+  );
+});
+
+const toggleSelectAll = () => {
+  const currentIds = historyResponse.value.data.map((item) => item.id);
+  if (isAllSelected.value) {
+    selectedIds.value = selectedIds.value.filter(
+      (id) => !currentIds.includes(id),
+    );
+  } else {
+    selectedIds.value = [...new Set([...selectedIds.value, ...currentIds])];
+  }
+};
 
 const toggleExpand = (id) => {
   if (expandedItems.value.has(id)) {
@@ -176,13 +276,63 @@ const {
   "history",
   () =>
     $fetch("/api/auth/history", {
-      params: { page: currentPage.value },
+      query: { page: currentPage.value },
     }),
   {
-    watch: [currentPage], 
+    watch: [currentPage],
     server: false,
-  }
+  },
 );
+
+const dialogConfig = ref({
+  show: false,
+  title: '',
+  message: '',
+  type: 'primary',
+  confirmText: '',
+  action: null
+});
+
+const deleteSelected = () => {
+  dialogConfig.value = {
+    show: true,
+    title: 'Delete Selected',
+    message: `Are you sure you want to delete ${selectedIds.value.length} items? This will archive your data.`,
+    type: 'danger',
+    confirmText: 'Delete Items',
+    action: 'delete'
+  };
+};
+
+const clearHistory = () => {
+  dialogConfig.value = {
+    show: true,
+    title: 'Clear All History',
+    message: 'This will archive every single record in your history. Do you want to proceed?',
+    type: 'danger',
+    confirmText: 'Clear Everything',
+    action: 'clear'
+  };
+};
+
+const handleDialogConfirm = async () => {
+  const mode = dialogConfig.value.action;
+  dialogConfig.value.show = false;
+
+  try {
+    if (mode === 'delete') {
+      await $fetch("/api/auth/history", { method: "DELETE", body: { ids: selectedIds.value } });
+      selectedIds.value = [];
+    } else {
+      await $fetch("/api/auth/history", { method: "DELETE" });
+    }
+    
+    refresh();
+    toast.add({ severity: 'success', summary: 'Success', detail: 'History Deleted Successfully', life: 3000 });
+  } catch (e) {
+    console.error("Action failed", e);
+  }
+};
 
 const onPageChange = (event) => {
   currentPage.value = event.page + 1;
@@ -216,17 +366,6 @@ async function copyText(text) {
     console.error("Failed to copy:", error);
   }
 }
-
-const clearHistory = async () => {
-  // if (confirm("Delete all history records?")) {
-  //   try {
-  //     await $fetch("/api/auth/history/clear", { method: "DELETE" });
-  //     refresh();
-  //   } catch (e) {
-  //     console.error("Failed to clear history");
-  //   }
-  // }
-};
 </script>
 <style scoped>
 /* Reset PrimeVue Defaults */
@@ -258,5 +397,16 @@ const clearHistory = async () => {
   color: #ffffff !important;
   box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3); /* shadow-blue-500/30 */
   transform: scale(1.1);
+}
+
+.slide-up-enter-active,
+.slide-up-leave-active {
+  transition: all 0.5s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+}
+
+.slide-up-enter-from,
+.slide-up-leave-to {
+  opacity: 0;
+  transform: translate(-50%, 100px) scale(0.8);
 }
 </style>

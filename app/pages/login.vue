@@ -28,7 +28,7 @@
           />
         </div>
 
-        <AuthPasswordInput v-model="password" label="Password" required>
+        <PasswordInput v-model="password" label="Password" required>
           <template #right-label>
             <NuxtLink
               to="/forgot-password"
@@ -37,7 +37,7 @@
               Forgot password?
             </NuxtLink>
           </template>
-        </AuthPasswordInput>
+        </PasswordInput>
 
         <div
           v-if="error"

@@ -1,6 +1,35 @@
 <template>
   <div class="max-w-4xl mx-auto space-y-8">
     <div
+      v-if="isLoading"
+      class="bg-white dark:bg-gray-800 rounded-3xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden animate-pulse"
+    >
+      <div class="h-32 bg-gray-200 dark:bg-gray-700"></div>
+      <div class="px-8 pb-8">
+        <div class="relative flex justify-between items-end -mt-12 mb-6">
+          <div class="p-2 bg-white dark:bg-gray-900 rounded-2xl shadow-lg">
+            <div
+              class="w-24 h-24 rounded-xl bg-gray-200 dark:bg-gray-700"
+            ></div>
+          </div>
+          <div class="w-32 h-10 bg-gray-100 dark:bg-gray-700 rounded-xl"></div>
+        </div>
+        <div class="space-y-3">
+          <div class="h-8 w-48 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
+          <div class="h-4 w-64 bg-gray-100 dark:bg-gray-800 rounded-lg"></div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-12">
+          <div
+            v-for="i in 3"
+            :key="i"
+            class="h-20 bg-gray-50 dark:bg-gray-900/50 rounded-2xl border border-gray-100 dark:border-gray-800"
+          ></div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      v-else
       class="bg-white dark:bg-gray-800 rounded-3xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden"
     >
       <div class="h-32 bg-gradient-to-r from-blue-600 to-purple-600"></div>
@@ -27,7 +56,9 @@
             <h1 class="text-2xl font-black text-gray-900 dark:text-white">
               {{ authStore.user?.name }}
             </h1>
-            <p class="text-gray-500 dark:text-gray-400">{{ authStore.user?.email }}</p>
+            <p class="text-gray-500 dark:text-gray-400">
+              {{ authStore.user?.email }}
+            </p>
           </div>
 
           <span
@@ -130,13 +161,12 @@
       </div>
     </div>
 
-    <ProfileEditDialog 
-      :show="showEditDialog" 
+    <ProfileEditModal
+      :show="showEditDialog"
       :initialName="authStore.user?.name"
       @close="showEditDialog = false"
       @updated="onProfileUpdated"
     />
-
   </div>
 </template>
 
@@ -146,19 +176,27 @@ import { useMyAuthStore } from "~/stores/auth";
 definePageMeta({
   middleware: "auth",
 });
+
 const authStore = useMyAuthStore();
 const showEditDialog = ref(false);
 const resending = ref(false);
 const resendMessage = ref("");
 const toast = useToast();
+const isMounted = ref(false);
+
+onMounted(() => {
+  isMounted.value = true;
+});
+
+const isLoading = computed(() => !isMounted.value || !authStore.user);
 
 const onProfileUpdated = (userData) => {
   authStore.setUser(userData);
   toast.add({
-    severity: 'success',
-    summary: 'Profile Updated',
-    detail: 'Your information has been saved successfully.',
-    life: 3000
+    severity: "success",
+    summary: "Profile Updated",
+    detail: "Your information has been saved successfully.",
+    life: 3000,
   });
 };
 

@@ -57,7 +57,7 @@
           </p>
         </div>
 
-        <AuthPasswordInput
+        <PasswordInput
           v-model="password"
           label="Password"
           placeholder="Min. 8 characters"
@@ -65,7 +65,7 @@
           required
         />
 
-        <AuthPasswordInput
+        <PasswordInput
           v-model="passwordConfirm"
           label="Password Confirmation"
           placeholder="Repeat your password"

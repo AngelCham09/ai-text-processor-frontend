@@ -10,8 +10,8 @@
         </p>
       </div>
 
-      <div class="flex items-center gap-4">
-        <div v-if="historyResponse?.data?.length" class="flex items-center gap-2 mr-2">
+      <div v-if="historyResponse?.data?.length" class="flex items-center gap-4">
+        <div class="flex items-center gap-2 mr-2">
           <input
             type="checkbox"
             :checked="isAllSelected"

@@ -38,3 +38,12 @@ A modern, high-performance web application built with Nuxt 4 and Vue 3. This cli
 3. **Run Development Server:**
    ```bash
    npm run dev
+
+## Preview
+| Page | Screenshot |
+|:--- |:--- |
+| **Login** | ![Login](./app/assets/readme/login.png) |
+| **Register** | ![Register](./app/assets/readme/register.png) |
+| **Main Dashboard** | ![Dashboard](./app/assets/readme/dashboard.png) |
+| **User Profile** | ![Profile](./app/assets/readme/profile.png) |
+| **History** | ![History](./app/assets/readme/history.png) |

@@ -1,75 +1,40 @@
-# Nuxt Minimal Starter
+# AI Writing Assistant - Frontend
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+A modern, high-performance web application built with Nuxt 4 and Vue 3. This client interfaces with the AI Writer API to provide a seamless user experience for content creation.
 
-## Setup
+## Key Features
 
-Make sure to install dependencies:
+* **AI Writing Workspace**: Dual-pane interface for inputting text and receiving real-time AI results.
+* **Interactive Tools**: Quick-action buttons for Improving, Summarizing, Professionalizing, and Formatting text.
+* **User Management**:
+    * Full Auth Flow (Login, Register, Forgot Password).
+    * Profile Management with identity updates and Security settings.
+    * Real-time Email Verification status and resend triggers.
+* **History & Management**: Dedicated history dashboard allowing users to review, copy, or delete previous AI generations.
+* **Nuxt Server Proxy**: Secure API communication via Nuxt Nitro proxying to prevent CORS issues and hide backend structures.
+* **UI/UX**: 
+    * Fully Responsive Design using **Tailwind CSS**.
+    * Modular Component Architecture (Reusable Modals, Custom Password Inputs, Loading States).
 
-```bash
-# npm
-npm install
+## Tech Stack
 
-# pnpm
-pnpm install
+* **Framework**: Nuxt 4 (Vue 3)
+* **Styling**: Tailwind CSS
+* **Icons/UI**: Headless UI & PrimeVue
+* **State Management**: Pinia / Ref API
+* **HTTP Client**: Nuxt `useFetch` & `$fetch`
 
-# yarn
-yarn install
+## Installation & Setup
 
-# bun
-bun install
-```
+1. **Clone the repo:**
+   ```bash
+   git clone [YOUR_REPO_LINK]
+   cd [YOUR_REPO_FOLDER]
+   
+2. **Install dependencies:**
+   ```bash
+   npm install
 
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+3. **Run Development Server:**
+   ```bash
+   npm run dev
